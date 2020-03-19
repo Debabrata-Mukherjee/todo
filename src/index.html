@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <link rel="stylesheet" src="styles.css">
+        <style>
+            .todo-checked{
+                text-decoration: line-through;
+            }
+        </style>
+
+    
+    <script type="text/javascript" src="E:/Node Projects/tut_todo/app.js"></script>
+    <script>
+        
+        fetch(" /app/todo ").then(function(resp) {    // response is send from the app.js server
+            console.log(resp)
+            console.log(typeof(resp))
+ //           console.log(resp.text())
+            resp.text().then(function(data) { // resp.text() is converting response to text 
+                console.log(data)
+                console.log(typeof(data))
+
+                var todos = JSON.parse(data);
+                console.log(todos)
+                console.log(typeof(todos))
+                var i = 0;
+                var j = 0;
+                var result = Object.entries(todos); 
+
+                for (i = 0; i < result.length; i++){
+                    var day = result[i][0]
+                    
+                    for(j=0;j<result[i][1].length;j++)
+                    {
+                        var li = document.createElement("li");
+                        var input = document.createElement("input")
+                        input.setAttribute("type","checkbox");
+                        input.onclick = oncheck
+                        li.appendChild(input);
+                        var span = document.createElement("span");
+                        span.innerHTML = result[i][1][j]
+                        li.appendChild(span)
+                        document.getElementById(day).appendChild(li);
+                    }
+
+                }
+            })
+        })   
+        function add_todo(val,string_val){
+            val = val.toString();
+            var data = document.getElementById(val).value;
+            var li = document.createElement("li");
+            var t = document.createTextNode(data);
+            li.appendChild(t);
+            if (data === '' || data == null) {
+                alert("Input Value is Empty");
+            } else {
+                document.getElementById(string_val).appendChild(li);
+                var link = "/app/todo/add?todoname="+string_val+"-->"+data;
+                var button = document.createElement("BUTTON");
+                button.innerHTML = "remove todo";
+                document.getElementById(string_val).appendChild(button);
+                fetch(link).then(response =>{
+                console.log("Added new todo...console o/p")
+            })
+            }
+            document.getElementById(val).value = ""
+        }
+
+        function oncheck(){
+            console.log(this)   // this represents checkbox element
+            if(this.checked){
+                this.parentElement.classList.add('todo-checked')
+                console.log("checked")
+            }
+            else{
+                this.parentElement.classList.remove('todo-checked')
+                console.log("unchecked")
+            }
+        }
+    </script>
+    </head>
+    <body>
+        <div id = "myDIV" class = "header">
+            <h1>TO-DO LIST</h1>
+            <ul id = "dates">
+                <ul id = "monday"><h2>Monday</h2></ul>
+                <input type="text" id="0" name = "monday" placeholder="Add to Monday">
+                <button onclick="add_todo(0,'monday')" name = "monday" type="button" class = "addBtn"  style="width: 80px;height: 20px" >Add</button>
+                <ul id = "tuesday"><h2>Tuesday</h2></ul></ul>
+                <input type="text" id = "1" placeholder="Add to Monday">
+                <button onclick="add_todo(1,'tuesday')" type="button" class = "addBtn"   style="width: 80px;height: 20px" >Add</button>
+                <ul id = "wednesday"><h2>Wednesday</h2></ul>
+                <input type="text" id="2" placeholder="Add to Monday">
+                <button onclick="add_todo(2,'wednesday')" type="button" class = "addBtn" style="width: 80px;height: 20px" >Add</button>
+                <ul id = "thursday"><h2>Thursday</h2></ul>
+                <input type="text" id="3" placeholder="Add to Monday">
+                <button onclick="add_todo(3,'thursday')" type="button" class = "addBtn"   style="width: 80px;height: 20px" >Add</button>
+                <ul id = "friday"><h2>Friday</h2></ul>
+                <input type="text" id="4" placeholder="Add to Monday">
+                <button onclick="add_todo(4,'friday')" type="button" class = "addBtn"   style="width: 80px;height: 20px" >Add</button>
+                <ul id = "saturday"><h2>Saturday</h2></ul>
+                <input type="text" id="5" placeholder="Add to Monday">
+                <button onclick="add_todo(5,'saturday')" type="button" class = "addBtn"   style="width: 80px;height: 20px" >Add</button>
+                <ul id = "sunday"><h2>Sunday</h2></ul>
+                <input type="text" id="6" placeholder="Add to Monday">
+                <button onclick="add_todo(6,'sunday')" type="button" class = "addBtn"   style="width: 80px;height: 20px" >Add</button>
+            </ul>
+    
+    </div>
+    </body>
